@@ -8,25 +8,25 @@ import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js'
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 import { GTAOPass } from 'three/addons/postprocessing/GTAOPass.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
-import plan from './data/plan.js?v=202611091207';
-import PROPS from './data/props.js?v=202611091207';
-import * as THEME_DATA from './data/themes.js?v=202611091207';
-import { PUZZLES, FLOW } from './data/puzzles.js?v=202611091207';
-import { themes, causticUniforms, propFinishes, QUALITY, refineQuality, startTextures, markAutoLow, ssGet, ssSet } from './lib/materials.js?v=202611091207';
-import { buildProp, mergeStatic, batchStatic, PICK_LAYER } from './lib/props.js?v=202611091207';
-import { initEngineer } from './lib/engineer.js?v=202611091207';
-import { buildProp as buildPropUoM } from './lib/props_uom.js?v=202611091207';
+import plan from './data/plan.js?v=202611091211';
+import PROPS from './data/props.js?v=202611091211';
+import * as THEME_DATA from './data/themes.js?v=202611091211';
+import { PUZZLES, FLOW } from './data/puzzles.js?v=202611091211';
+import { themes, causticUniforms, propFinishes, QUALITY, refineQuality, startTextures, markAutoLow, ssGet, ssSet } from './lib/materials.js?v=202611091211';
+import { buildProp, mergeStatic, batchStatic, PICK_LAYER } from './lib/props.js?v=202611091211';
+import { initEngineer } from './lib/engineer.js?v=202611091211';
+import { buildProp as buildPropUoM } from './lib/props_uom.js?v=202611091211';
 
 const $ = (s) => document.querySelector(s);
 const THEME_MAP = THEME_DATA.default || {};
 // Per-game settings (data/game.js, optional): title, pageTitle, walkStart [x, y], ...
 let GAME = {};
-try { GAME = (await import('./data/game.js?v=202611091207')).default || {}; } catch (e) { console.warn('No game config', e.message); }
+try { GAME = (await import('./data/game.js?v=202611091211')).default || {}; } catch (e) { console.warn('No game config', e.message); }
 if (GAME.pageTitle) document.title = GAME.pageTitle;
 if (GAME.title) { const h = document.querySelector('#side h1'); if (h) h.textContent = GAME.title; }
 // Shop links (data/links.js is maintained separately; the viewer works without it)
 let LINKS = {}, GAME_LINK = null;
-try { ({ LINKS = {}, GAME_LINK = null } = await import('./data/links.js?v=202611091207')); } catch (e) { console.warn('No shop links', e.message); }
+try { ({ LINKS = {}, GAME_LINK = null } = await import('./data/links.js?v=202611091211')); } catch (e) { console.warn('No shop links', e.message); }
 const shopOf = (k) => { const e = k && LINKS[k]; return e && (e.puzzle?.url || e.components?.length) ? e : null; };
 const hasProduct = (k) => !!(k && LINKS[k]?.puzzle?.url);
 // runtime errors after the first frame: small note (before it, the bootstrap in index.html shows a full message + Retry)

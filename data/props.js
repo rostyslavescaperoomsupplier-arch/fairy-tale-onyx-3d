@@ -10,7 +10,7 @@
 //   h      cm. wall: height of the prop's base above floor; floor: lift; ceiling: drop
 // Combination boxes 21-26 hang on the wall at ~150 cm (the .ai draws them flat on the walls; the old power plan
 // puts the combination-box outlets at 150 cm).
-import { shifted as U } from './uom/layout.js?v=202611091207';
+import { shifted as U } from './uom/layout.js?v=202611091211';
 const CB_H = 120;
 export default [
   // ---- Library (bottom, 463 x 174) ----

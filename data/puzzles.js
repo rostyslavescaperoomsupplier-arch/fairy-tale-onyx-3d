@@ -1,4 +1,4 @@
-import * as UP from './uom/puzzles.js?v=202611091207';
+import * as UP from './uom/puzzles.js?v=202611091211';
 // Puzzle descriptions (text of the ERS per-puzzle PDFs) and game flow.
 const FTL_PUZZLES = {
   '00': { name: "Storyteller's Book", room: 'library',
