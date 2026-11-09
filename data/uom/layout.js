@@ -1,13 +1,12 @@
-// University of Magic - Onyx layout, placed in the same scene 100 cm to the right of the Fairy Tale Library.
+// University of Magic - Onyx layout, placed in the same scene 100 cm to the LEFT of the Fairy Tale Library, mirrored.
 // Sources (reference/uom_*):
 //   "University of Magic Dimensions Onyx Updated.pdf" (Drive): room order, doors, props per room
 //   hand sketch 1794219364589.jpg: measured sizes. The sketch is drawn mirrored left-right compared with the .ai;
-//   the .ai orientation is used here (Main Room + entrance bottom left, Garden bottom right).
+//   data below is in .ai orientation; `shifted` mirrors it into the sketch orientation (Garden left, Main Room right).
 //   Sizes: Main Room 267 x 424, Garden 147 x 424 (sketch 2.72 / 1.52 taken to the wall centre line), upper block
 //   405 deep: Astrology 213 wide (top part, 216 deep) + 125 wide (bottom part, 180 deep), Dueling the mirror image
 //   (201 / 289). Ceiling 250 cm assumed.
 // Everything below is in local cm (outer top-left corner of this block = 0,0); OX shifts it into the scene.
-export const OX = 483 + 100;
 const H = 250;
 
 export const PLAN = {
@@ -188,13 +187,18 @@ export const LINKS = [
   { a: 'U_LAMPM', b: null, type: 'pwr', v: '230 V' }, { a: 'U_LAMPG', b: null, type: 'pwr', v: '230 V' }, { a: 'U_LAMPD', b: null, type: 'pwr', v: '230 V' },
 ];
 
-// shift local coordinates into the scene
-const sx = ([x, y]) => [x + OX, y];
+// place into the scene: mirrored left-right (as on the measured sketch: Garden left, Main Room right) and put
+// 100 cm to the LEFT of the Fairy Tale Library block: local x -> -GAP - x. Only positions are mirrored, the prop
+// models are not (their text stays readable); floor/ceiling rotations are mirrored (rot -> -rot), polygons keep
+// their winding.
+export const GAP = 100;
+const sx = ([x, y]) => [-GAP - x, y];
+const mrot = (r) => (r == null ? r : -r);
 export const shifted = {
-  rooms: PLAN.rooms.map((r) => ({ ...r, polygon: r.polygon.map(sx) })),
+  rooms: PLAN.rooms.map((r) => ({ ...r, polygon: r.polygon.map(sx).reverse() })),
   walls: PLAN.walls.map((w) => ({ ...w, a: sx(w.a), b: sx(w.b) })),
   doors: PLAN.doors.map((d) => ({ ...d, center: sx(d.center) })),
-  props: PROPS.map((p) => ({ ...p, pos: p.pos[0] === 0 && p.pos[1] === 0 ? p.pos : sx(p.pos) })),
+  props: PROPS.map((p) => ({ ...p, pos: sx(p.pos), rot: mrot(p.rot) })),
   switch: { ...SWITCH, at: sx(SWITCH.at), psu: 'PSUU' },
   psu: { ...PSU, at: sx(PSU.at), sw: 'SWU' },
   items: ITEMS.map((i) => ({ ...i, at: sx(i.at) })),
