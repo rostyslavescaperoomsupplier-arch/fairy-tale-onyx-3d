@@ -1,3 +1,4 @@
+import * as UL from './uom/links.js';
 // Links to escaperoomsupplier.com shop products for each puzzle (keys = ids in puzzles.js).
 // Generated 2026-10-30 from the public WooCommerce Store API; every URL checked (HTTP 200).
 // Components follow the "Electronics" lists of the server gdoc cards (2026-10-28/29); (xN) = quantity.
@@ -5,7 +6,7 @@
 // from price_html; variable products / "From:" bundles use the lowest price. null = price hidden.
 export const GAME_LINK = {"name": "Fairy Tale Library (full escape room game kit)", "url": "https://www.escaperoomsupplier.com/product/fairy-tale-library-turnkey-escape-room-game/"};
 
-export const LINKS = {
+const FTL_LINKS = {
   "00": {
     "puzzle": {
       "name": "Storyteller’s Book hint system",
@@ -561,3 +562,5 @@ export const LINKS = {
     "components": []
   }
 };
+
+export const LINKS = { ...FTL_LINKS, ...Object.fromEntries(Object.entries(UL.LINKS).map(([k, v]) => ['U' + k, v])) };

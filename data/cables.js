@@ -1,3 +1,4 @@
+import { shifted as U } from './uom/layout.js';
 // Engineer mode data: controllers, cable ends, outlets and the cables between them (Onyx layout).
 //
 // Where it comes from
@@ -16,9 +17,9 @@
 //   lan: true = home run to the switch; outlet: '40' | '150' | '220' (230 V socket next to the box)
 // Link fields: a, b (item ids), type: 'lan' | 'sig' (signal/control) | 'pwr' (12 V) | 'spk' (speaker), floor: true = floor channel
 export const TRUNK_H = 252; // cable route on top of the 250 cm walls
-export const SWITCH = { id: 'SW', label: 'Switch 24p + GM PC', kind: 'switch', at: [140, 872], h: 100, outside: true, note: 'Outside the entrance wall, left of D1 (assumed)' };
+export const SWITCH_FTL = { id: 'SW', label: 'Switch 24p + GM PC', kind: 'switch', at: [140, 872], h: 100, outside: true, note: 'Outside the entrance wall, left of D1 (assumed)' };
 
-export const ITEMS = [
+const FTL_ITEMS = [
   // ---------- Library ----------
   { id: 'UPC12', label: 'UPC #12', role: "Hint stand, 00 Storyteller's Book", room: 'library', at: [67, 826], h: 40, kind: 'upc', lan: true, outlet: '40' },
   { id: 'MINI', label: 'Mini switch', role: 'In cabinet 01, joins UPC #14 + #19', room: 'library', at: [440, 828], h: 40, kind: 'net', lan: true, outlet: '40' },
@@ -103,7 +104,7 @@ export const ITEMS = [
 ];
 
 // Cables other than the home runs (those are generated for every item with lan: true)
-export const LINKS = [
+const FTL_LINKS = [
   // library
   { a: 'UPC14', b: 'MINI', type: 'lan', inside: 'cabinet 01' },
   { a: 'UPC19', b: 'MINI', type: 'lan', inside: 'cabinet 01' },
@@ -151,3 +152,8 @@ export const OUTLETS = {
   '150': { name: '230 V socket ~150 cm (combination box)', color: '#2e9d3a' },
   '220': { name: '230 V socket ~220 cm (near ceiling)', color: '#1e9be0' },
 };
+
+// both games: Fairy Tale items go to SW, University of Magic items to SWU
+export const SWITCHES = [SWITCH_FTL, U.switch];
+export const ITEMS = [...FTL_ITEMS, ...U.items];
+export const LINKS = [...FTL_LINKS, ...U.links];

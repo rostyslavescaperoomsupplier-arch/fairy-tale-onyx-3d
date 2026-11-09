@@ -1,5 +1,6 @@
+import * as UP from './uom/puzzles.js';
 // Puzzle descriptions (text of the ERS per-puzzle PDFs) and game flow.
-export const PUZZLES = {
+const FTL_PUZZLES = {
   '00': { name: "Storyteller's Book", room: 'library',
     desc: 'Hint system. Lectern with a book that has a display inside showing the time. A magnetic sensor hidden under the start symbol (triggered by the Fairy Godmother\'s wand) asks for a hint. Hidden speakers play the intro, outro, ambience and hints.' },
   '01': { name: "Fairy Godmother's Cabinet", room: 'library',
@@ -56,10 +57,15 @@ export const PUZZLES = {
 // Directed edges of the game order [from, to]. Only edges backed by the puzzle PDFs / gdoc cards
 // (2026-10-28/29): a code opens its box, an item found in one puzzle is used in another, or a
 // room has to be open first. What boxes 23-26 and the Jewel Wheel pedestal hold is not documented.
-export const FLOW = [
+const FTL_FLOW = [
   ['00', '02'], ['02', '01'], ['01', '03'],
   ['03', '05'], ['05', '21'], ['21', '06'], ['06', '07'], ['07', '08'],
   ['03', '10'], ['03', '11'], ['10', '23'], ['11', '24'], ['03', '12'], ['12', '08'],
   ['08', '13'], ['13', '14'], ['13', '15'], ['13', '17'], ['14', '22'], ['22', '16'], ['15', '26'], ['16', '25'],
   ['13', '09'], ['09', '18'], ['09', '19'], ['18', '20'], ['19', '20'], ['20', '04'],
 ];
+
+// University of Magic: same numbers, keys prefixed with U (label shows the plain number)
+const pre = (k) => 'U' + k;
+export const PUZZLES = { ...FTL_PUZZLES, ...Object.fromEntries(Object.entries(UP.PUZZLES).map(([k, v]) => [pre(k), { ...v, label: k }])) };
+export const FLOW = [...FTL_FLOW, ...UP.FLOW.map(([a, b]) => [pre(a), pre(b)])];

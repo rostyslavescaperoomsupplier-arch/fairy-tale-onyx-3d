@@ -15,6 +15,7 @@ import { PUZZLES, FLOW } from './data/puzzles.js';
 import { themes, causticUniforms, propFinishes, QUALITY, refineQuality, startTextures, markAutoLow, ssGet, ssSet } from './lib/materials.js';
 import { buildProp, mergeStatic, batchStatic, PICK_LAYER } from './lib/props.js';
 import { initEngineer } from './lib/engineer.js';
+import { buildProp as buildPropUoM } from './lib/props_uom.js';
 
 const $ = (s) => document.querySelector(s);
 const THEME_MAP = THEME_DATA.default || {};
@@ -324,6 +325,7 @@ mergeStatic(wallsG); // ~85 wall pieces x 6 faces (+ trims) -> one mesh per mate
 
 // ---------------- props ----------------
 const deg = Math.PI / 180;
+const disp = (k) => PUZZLES[k]?.label ?? k; // University of Magic keys are U00.. but show 00..
 const puzzleOf = (p) => (p.decor ? null : p.puzzle || (p.id.match(/^\d{2}/) || [p.id.replace(/[^A-Za-z]/g, '')])[0]);
 function nearestWallLine(x, y) {
   let best = null;
@@ -334,7 +336,7 @@ function nearestWallLine(x, y) {
 }
 const propObjs = [], overheadObjs = [], OVERHEAD_KINDS = new Set(['chandelier', 'led_ceiling_board']);
 for (const p of PROPS) {
-  const obj = buildProp(p);
+  const obj = p.game === 'uom' ? buildPropUoM(p) : buildProp(p);
   const room = roomById[p.room] || roomAt(...p.pos);
   const ceil = room?.ceil ?? DEFAULT_H;
   const [x, y] = p.pos;
@@ -371,7 +373,7 @@ for (const k of puzzleIds) {
   const o = primary[k], bb = new THREE.Box3().setFromObject(o), c = bb.getCenter(new THREE.Vector3());
   const room = roomById[o.userData.prop.room]; const top = Math.min(bb.max.y + 18, (room?.ceil ?? DEFAULT_H) - 10);
   anchor[k] = new THREE.Vector3(c.x, top, c.z);
-  const el = document.createElement('div'); el.className = 'label'; el.textContent = k; el.title = (PUZZLES[k]?.name || '') + (hasProduct(k) ? ' (in shop)' : '');
+  const el = document.createElement('div'); el.className = 'label'; el.textContent = disp(k); el.title = (PUZZLES[k]?.name || '') + (hasProduct(k) ? ' (in shop)' : '');
   if (hasProduct(k)) el.insertAdjacentHTML('beforeend', '<i class="sdot"></i>');
   el.addEventListener('click', (e) => { e.stopPropagation(); select(o); });
   const lab = new CSS2DObject(el); lab.position.copy(anchor[k]); labelsG.add(lab); labelEls[k] = el; labelObjs[k] = lab;
@@ -576,7 +578,7 @@ sheetDrag($('#panel'), '.grab, .top', () => select(null));
   for (const r of rooms) {
     const ks = puzzleIds.filter((k) => primary[k].userData.prop.room === r.id); if (!ks.length) continue;
     html += `<li class="grp"><span class="dot" style="background:${roomSwatch(r)}"></span>${r.name}</li>`;
-    html += ks.map((k) => `<li class="item" data-k="${k}" tabindex="0" role="button"><span class="num">${k}</span>${PUZZLES[k]?.name || primary[k].userData.prop.name}${hasProduct(k) ? '<span class="shoptag" title="Available in the shop">shop</span>' : ''}</li>`).join('');
+    html += ks.map((k) => `<li class="item" data-k="${k}" tabindex="0" role="button"><span class="num">${disp(k)}</span>${PUZZLES[k]?.name || primary[k].userData.prop.name}${hasProduct(k) ? '<span class="shoptag" title="Available in the shop">shop</span>' : ''}</li>`).join('');
   }
   $('#puzzles').innerHTML = html;
 }
@@ -673,7 +675,7 @@ function shopHtml(k) {
     ${comps.length ? `<div class="meta" style="margin:12px 0 0">Components</div><ul class="comps">${comps.map((c) => `<li><span class="stk${c.in_stock ? '' : ' out'}" title="${c.in_stock ? 'In stock' : 'Out of stock'}"></span><a href="${safeUrl(c.url)}" target="_blank" rel="noopener" title="${esc(c.name || '')}">${esc(c.name || '')}</a><span class="pr">${fmtPrice(c)}</span></li>`).join('')}</ul>` : ''}
   </div>`;
 }
-function chip(k) { return `<button type="button" class="chip" data-k="${k}"><span class="n">${k}</span>${esc(PUZZLES[k]?.name || '')}</button>`; }
+function chip(k) { return `<button type="button" class="chip" data-k="${k}"><span class="n">${disp(k)}</span>${esc(PUZZLES[k]?.name || '')}</button>`; }
 function select(obj, fly = false) {
   selected = obj; const panel = $('#panel');
   Object.values(labelEls).forEach((el) => el.classList.remove('on'));
@@ -686,7 +688,7 @@ function select(obj, fly = false) {
   const siblings = propObjs.filter((o) => o.userData.puzzle === k && k);
   const prev = FLOW.filter((e) => e[1] === k).map((e) => e[0]), next = FLOW.filter((e) => e[0] === k).map((e) => e[1]);
   panel.innerHTML = `<div class="grab" aria-hidden="true"></div>
-    <div class="top"><div class="big">${esc(k || '')}</div><button type="button" class="close" id="pclose" aria-label="Close details">Close</button></div>
+    <div class="top"><div class="big">${esc(k ? disp(k) : '')}</div><button type="button" class="close" id="pclose" aria-label="Close details">Close</button></div>
     <h3>${esc(P.name || p.name)}</h3>
     <div class="meta"><span class="dot" style="background:${room ? roomSwatch(room) : '#666'}"></span>${esc(room?.name || p.room)}${k ? '' : ' &middot; set dressing'}</div>
     <div class="prop"><b>Selected prop</b>${esc(p.name)}</div>

@@ -10,6 +10,7 @@
 //   h      cm. wall: height of the prop's base above floor; floor: lift; ceiling: drop
 // Combination boxes 21-26 hang on the wall at ~150 cm (the .ai draws them flat on the walls; the old power plan
 // puts the combination-box outlets at 150 cm).
+import { shifted as U } from './uom/layout.js';
 const CB_H = 120;
 export default [
   // ---- Library (bottom, 463 x 174) ----
@@ -122,4 +123,6 @@ export default [
     kelp: [[255, 30, 6, 80], [462, 80, 6, 90], [330, 318, 6, 85]], net: [300, 10, 70, 90, 0, 1] },
   { id: 'D4', decor: true, name: 'Organza jellyfish', room: 'mermaid_cave', kind: 'jellyfish', pos: [330, 120], mount: 'ceiling', drop: 70 },
   { id: 'D5', decor: true, name: 'Organza jellyfish', room: 'mermaid_cave', kind: 'jellyfish', pos: [400, 230], mount: 'ceiling', drop: 85 },
+  // ---- University of Magic (data/uom/layout.js) ----
+  ...U.props,
 ];
