@@ -155,6 +155,8 @@
   #eng .pzg { display: grid; grid-template-columns: 96px 1fr; gap: 6px; padding: 5px 0; border-bottom: 1px solid var(--line); }
   #eng .pzg .wb button small { display: none; }
   #eng .pzg .wb button { min-width: 22px; text-align: center; }
+  #eng .pzg .wb button.off { background: transparent; border-color: var(--line); color: #5d616a; text-decoration: line-through; }
+  #eng .flt h4 { margin-top: 6px; } #eng .flt .hint { text-transform: none; letter-spacing: 0; font-weight: 400; }
   #eng .flt summary, #eng details.plan summary { font-size: 12.5px; }
   svg.plan .pw { stroke: #4a505c; } svg.plan .pd { stroke: #0e1014; }
   svg.plan polygon { fill: #1a1d23; }
@@ -379,7 +381,7 @@
       fetch(url, { cache: 'no-store', mode: 'cors' }).then(function (r) { clearTimeout(t); ok(r.ok); }, function () { clearTimeout(t); ok(false); });
     });
   }
-  import('./main.js').catch(function (e) {
+  import('./main.js?v=202611091157').catch(function (e) {
     var m = (e && e.message) || String(e);
     if (m === 'WebGL unavailable') { boot.started = true; clearTimeout(slow); el.remove(); return; } // main.js shows its own explanation
     console.error(e);
