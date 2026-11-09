@@ -123,6 +123,7 @@ export const PROPS = [
 ].map(P);
 
 // ---- engineer mode: UPC numbers from "university of magic all puzzles and uupc eng" (Drive) ----
+export const PSU = { id: 'PSUU', label: '12 V PSU (UoM)', kind: 'psu', at: [160, 867], h: 100, outside: true, note: 'Central 12 V power supply next to the UoM switch' };
 export const SWITCH = { id: 'SWU', label: 'Switch 24p + GM PC (UoM)', kind: 'switch', at: [120, 867], h: 100, outside: true, note: 'Outside the University of Magic entrance wall, left of D1 (assumed)' };
 const I = (o) => ({ ...o, sw: 'SWU' });
 export const ITEMS = [
@@ -166,7 +167,7 @@ export const ITEMS = [
   I({ id: 'U_UPC1', label: 'UPC #1', role: 'Monster chest (21): 2 RFID, relay, LED controller, knocker', room: 'dueling_room', at: [270, 415], h: 40, kind: 'upc', lan: true, outlet: '40' }),
   I({ id: 'U_UPC9', label: 'UPC #9', role: 'Spellcasting (21): 6 cast-a-spell inputs, drawer', room: 'dueling_room', at: [315, 415], h: 40, kind: 'upc', lan: true, outlet: '40' }),
   ...[[14, 145, 250], [15, 145, 315], [16, 145, 380], [17, 434, 250], [18, 434, 315], [19, 434, 380]].map(([n, x, y]) =>
-    I({ id: 'U_UPC' + n, label: 'UPC #' + n, role: 'Cast-a-spell board (no LAN, to UPC #9)', room: 'dueling_room', at: [x, y], h: 100, kind: 'upc' })),
+    I({ id: 'U_UPC' + n, label: 'UPC #' + n, role: 'Cast-a-spell board (no LAN, to UPC #9; 12 V via the relay of UPC #1)', room: 'dueling_room', at: [x, y], h: 100, kind: 'upc', dc: 'U_UPC1' })),
   I({ id: 'U_CB25', label: 'CB 25', role: 'Combination box [36107]', room: 'dueling_room', at: [285, 10], h: 150, kind: 'cb', lan: true, outlet: '150' }),
   I({ id: 'U_CB27', label: 'CB 27', role: 'Combination box [^>>v<^]', room: 'dueling_room', at: [331, 10], h: 150, kind: 'cb', lan: true, outlet: '150' }),
   I({ id: 'U_CB28', label: 'CB 28', role: 'Combination box [EOIYA]', room: 'dueling_room', at: [377, 10], h: 150, kind: 'cb', lan: true, outlet: '150' }),
@@ -184,6 +185,7 @@ export const LINKS = [
   { a: 'U_UPC6', b: 'U_DRAW', type: 'sig', floor: true, via: [[88, 113], [200, 130]] },
   ...[14, 15, 16, 17, 18, 19].map((n) => ({ a: 'U_UPC9', b: 'U_UPC' + n, type: 'sig' })),
   { a: 'U_UPC1', b: 'U_UPC9', type: 'sig', inside: 'monster chest' },
+  ...[14, 15, 16, 17, 18, 19].map((n) => ({ a: 'U_UPC1', b: 'U_UPC' + n, type: 'dc', v: '12 V via relay' })),
   { a: 'U_LAMPM', b: null, type: 'pwr', v: '230 V' }, { a: 'U_LAMPG', b: null, type: 'pwr', v: '230 V' }, { a: 'U_LAMPD', b: null, type: 'pwr', v: '230 V' },
 ];
 
@@ -194,7 +196,8 @@ export const shifted = {
   walls: PLAN.walls.map((w) => ({ ...w, a: sx(w.a), b: sx(w.b) })),
   doors: PLAN.doors.map((d) => ({ ...d, center: sx(d.center) })),
   props: PROPS.map((p) => ({ ...p, pos: p.pos[0] === 0 && p.pos[1] === 0 ? p.pos : sx(p.pos) })),
-  switch: { ...SWITCH, at: sx(SWITCH.at) },
+  switch: { ...SWITCH, at: sx(SWITCH.at), psu: 'PSUU' },
+  psu: { ...PSU, at: sx(PSU.at), sw: 'SWU' },
   items: ITEMS.map((i) => ({ ...i, at: sx(i.at) })),
   links: LINKS.map((l) => (l.via ? { ...l, via: l.via.map(sx) } : l)),
 };

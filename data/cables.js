@@ -1,4 +1,4 @@
-import { shifted as U } from './uom/layout.js?v=202611091157';
+import { shifted as U } from './uom/layout.js?v=202611091207';
 // Engineer mode data: controllers, cable ends, outlets and the cables between them (Onyx layout).
 //
 // Where it comes from
@@ -143,6 +143,7 @@ const FTL_LINKS = [
 
 export const TYPES = {
   lan: { name: 'Ethernet (Cat5e/6)', color: '#3ddc5a' },
+  dc: { name: '12 V DC from the central PSU', color: '#ff4fa3' },
   sig: { name: 'Control / sensor cable', color: '#ffb02e' },
   spk: { name: 'Speaker cable', color: '#c08bff' },
   pwr: { name: 'Power 12 V / 230 V', color: '#ff5a4f' },
@@ -154,6 +155,11 @@ export const OUTLETS = {
 };
 
 // both games: Fairy Tale items go to SW, University of Magic items to SWU
+// central 12 V supplies, one next to each switch: every UPC and combination box gets its own 12 V run from it
+// (item.dc = id of another item to take 12 V from instead, e.g. the relay of UPC #1 for the cast-a-spell boards)
+export const PSU_FTL = { id: 'PSU', label: '12 V PSU (central)', kind: 'psu', at: [175, 872], h: 100, outside: true, note: 'Central 12 V power supply next to the switch' };
+SWITCH_FTL.psu = 'PSU';
 export const SWITCHES = [SWITCH_FTL, U.switch];
+export const PSUS = [PSU_FTL, U.psu];
 export const ITEMS = [...FTL_ITEMS, ...U.items];
 export const LINKS = [...FTL_LINKS, ...U.links];

@@ -5,7 +5,7 @@
 // Door offsets are taken from the .ai (drawn for 225-wide rooms) and scaled by 228/225.
 // Middle wall between the left and right rooms is 7 cm (2 x 228 + 7 = 463 = library width); all other walls 10 cm.
 // Ceiling height is not on the sketch: 250 cm assumed.
-import { shifted as U } from './uom/layout.js?v=202611091157';
+import { shifted as U } from './uom/layout.js?v=202611091207';
 const H = 250;
 const plan = {
   units: 'cm',

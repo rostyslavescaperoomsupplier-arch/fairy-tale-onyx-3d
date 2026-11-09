@@ -182,7 +182,7 @@
   svg.elev .cab { stroke-width: 1.6; stroke-linecap: round; }
   svg.elev .cab.spur { stroke-dasharray: 3 2; }
   svg.elev .bx { stroke: #0b0c0f; }
-  svg.elev .bx.k-upc { fill: #f2f2f2; } svg.elev .bx.k-cb { fill: #f2c94c; } svg.elev .bx.k-net { fill: #9ad0ff; } svg.elev .bx.k-end { fill: #ffb02e; } svg.elev .bx.k-switch { fill: #3ddc5a; }
+  svg.elev .bx.k-upc { fill: #f2f2f2; } svg.elev .bx.k-cb { fill: #f2c94c; } svg.elev .bx.k-net { fill: #9ad0ff; } svg.elev .bx.k-end { fill: #ffb02e; } svg.elev .bx.k-switch { fill: #3ddc5a; } svg.elev .bx.k-psu { fill: #ff4fa3; }
   svg.elev .bl { fill: #e8e4da; font-size: 8px; paint-order: stroke; stroke: #0e1014; stroke-width: 2.5px; }
   svg.elev .sock { stroke: #0b0c0f; }
   svg.elev .dim { stroke: #4a505c; stroke-dasharray: 1 2; }
@@ -190,7 +190,7 @@
   svg.elev .floor { stroke: #8f939c; stroke-width: 1.5; }
   svg.elev .cap { fill: #8f939c; font-size: 9px; }
   .englabel { font: 600 10px/1 var(--font); color: #0b0c0f; background: #f2f2f2; padding: 2px 4px; border-radius: 3px; white-space: nowrap; pointer-events: auto; cursor: default; }
-  .englabel.k-cb { background: #f2c94c; } .englabel.k-net { background: #9ad0ff; } .englabel.k-switch { background: #3ddc5a; }
+  .englabel.k-cb { background: #f2c94c; } .englabel.k-net { background: #9ad0ff; } .englabel.k-switch { background: #3ddc5a; } .englabel.k-psu { background: #ff4fa3; }
   body:not(.eng) .englabel { display: none; }
   #engPrintArea { display: none; }
   @media print {
@@ -381,7 +381,7 @@
       fetch(url, { cache: 'no-store', mode: 'cors' }).then(function (r) { clearTimeout(t); ok(r.ok); }, function () { clearTimeout(t); ok(false); });
     });
   }
-  import('./main.js?v=202611091157').catch(function (e) {
+  import('./main.js?v=202611091207').catch(function (e) {
     var m = (e && e.message) || String(e);
     if (m === 'WebGL unavailable') { boot.started = true; clearTimeout(slow); el.remove(); return; } // main.js shows its own explanation
     console.error(e);
