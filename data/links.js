@@ -1,4 +1,4 @@
-import * as UL from './uom/links.js?v=202611091211';
+import * as UL from './uom/links.js?v=202611091237';
 // Links to escaperoomsupplier.com shop products for each puzzle (keys = ids in puzzles.js).
 // Generated 2026-10-30 from the public WooCommerce Store API; every URL checked (HTTP 200).
 // Components follow the "Electronics" lists of the server gdoc cards (2026-10-28/29); (xN) = quantity.

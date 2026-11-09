@@ -8,25 +8,25 @@ import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js'
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 import { GTAOPass } from 'three/addons/postprocessing/GTAOPass.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
-import plan from './data/plan.js?v=202611091211';
-import PROPS from './data/props.js?v=202611091211';
-import * as THEME_DATA from './data/themes.js?v=202611091211';
-import { PUZZLES, FLOW } from './data/puzzles.js?v=202611091211';
-import { themes, causticUniforms, propFinishes, QUALITY, refineQuality, startTextures, markAutoLow, ssGet, ssSet } from './lib/materials.js?v=202611091211';
-import { buildProp, mergeStatic, batchStatic, PICK_LAYER } from './lib/props.js?v=202611091211';
-import { initEngineer } from './lib/engineer.js?v=202611091211';
-import { buildProp as buildPropUoM } from './lib/props_uom.js?v=202611091211';
+import plan from './data/plan.js?v=202611091237';
+import PROPS from './data/props.js?v=202611091237';
+import * as THEME_DATA from './data/themes.js?v=202611091237';
+import { PUZZLES, FLOW } from './data/puzzles.js?v=202611091237';
+import { themes, causticUniforms, propFinishes, QUALITY, refineQuality, startTextures, markAutoLow, ssGet, ssSet } from './lib/materials.js?v=202611091237';
+import { buildProp, mergeStatic, batchStatic, PICK_LAYER } from './lib/props.js?v=202611091237';
+import { initEngineer } from './lib/engineer.js?v=202611091237';
+import { buildProp as buildPropUoM } from './lib/props_uom.js?v=202611091237';
 
 const $ = (s) => document.querySelector(s);
 const THEME_MAP = THEME_DATA.default || {};
 // Per-game settings (data/game.js, optional): title, pageTitle, walkStart [x, y], ...
 let GAME = {};
-try { GAME = (await import('./data/game.js?v=202611091211')).default || {}; } catch (e) { console.warn('No game config', e.message); }
+try { GAME = (await import('./data/game.js?v=202611091237')).default || {}; } catch (e) { console.warn('No game config', e.message); }
 if (GAME.pageTitle) document.title = GAME.pageTitle;
 if (GAME.title) { const h = document.querySelector('#side h1'); if (h) h.textContent = GAME.title; }
 // Shop links (data/links.js is maintained separately; the viewer works without it)
 let LINKS = {}, GAME_LINK = null;
-try { ({ LINKS = {}, GAME_LINK = null } = await import('./data/links.js?v=202611091211')); } catch (e) { console.warn('No shop links', e.message); }
+try { ({ LINKS = {}, GAME_LINK = null } = await import('./data/links.js?v=202611091237')); } catch (e) { console.warn('No shop links', e.message); }
 const shopOf = (k) => { const e = k && LINKS[k]; return e && (e.puzzle?.url || e.components?.length) ? e : null; };
 const hasProduct = (k) => !!(k && LINKS[k]?.puzzle?.url);
 // runtime errors after the first frame: small note (before it, the bootstrap in index.html shows a full message + Retry)
@@ -329,7 +329,8 @@ const disp = (k) => PUZZLES[k]?.label ?? k; // University of Magic keys are U00.
 const puzzleOf = (p) => (p.decor ? null : p.puzzle || (p.id.match(/^\d{2}/) || [p.id.replace(/[^A-Za-z]/g, '')])[0]);
 function nearestWallLine(x, y) {
   let best = null;
-  for (const w of walls) { const { d } = segDist([x, y], w.a, w.b); if (!best || d < best.d) best = { d, w }; }
+  // a point at the very end of a wall (e.g. where a partition meets a cross wall) belongs to the wall it lies along
+  for (const w of walls) { const { d, t } = segDist([x, y], w.a, w.b), k = d + (t <= 0.001 || t >= 0.999 ? 6 : 0); if (!best || k < best.k) best = { d, k, w }; }
   if (!best || best.d > 70) return null;
   const { w } = best, s = (x - w.a[0]) * w.u[0] + (y - w.a[1]) * w.u[1];
   return { px: w.a[0] + w.u[0] * s, py: w.a[1] + w.u[1] * s, n: [-w.u[1], w.u[0]], t: w.t };

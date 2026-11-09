@@ -2,7 +2,7 @@
 // Either a theme name, or { theme, zones:[{ theme, rect:[x0,y0,x1,y1] }] } to
 // give part of a room its own look (floor, wall faces and light).
 // Themes: library, forest, castle, frozen, djinn, mermaid, neutral (lib/materials.js)
-import UOM_MAP, { THEMES as UOM_THEMES } from './uom/themes.js?v=202611091211';
+import UOM_MAP, { THEMES as UOM_THEMES } from './uom/themes.js?v=202611091237';
 export default {
   ...UOM_MAP,
   library: 'library',
